@@ -1,7 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
+import React, { Component } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 
 const list = [
   {
@@ -102,4 +100,72 @@ const list = [
   }
 ];
 
-ReactDOM.render(<App list={list} />, document.getElementById("root"));
+const rankRecord = list => {
+  list.sort((a, b) => b.weekendRev - a.weekendRev);
+
+  let rank = 1;
+  list.map(rankid => (rankid.id = rank++));
+  return list;
+};
+
+const columns = [
+  {
+    dataField: "id",
+    text: "#"
+  },
+  {
+    dataField: "titleName",
+    text: "Title",
+    sort: true
+  },
+  {
+    dataField: "distributorName",
+    text: "Distributor Name",
+    sort: true
+  },
+  {
+    dataField: "weekendRev",
+    text: "Weekend Total",
+    sort: true
+  },
+  {
+    dataField: "locs",
+    text: "# of Locs",
+    sort: true
+  },
+  {
+    dataField: "locAvg",
+    text: "Loc Avg",
+    sort: true
+  },
+  {
+    dataField: "cumeRev",
+    text: "Cume Total",
+    sort: true
+  }
+];
+
+let boxOfficeList = [];
+
+class BoxOffice extends Component {
+  constructor() {
+    super();
+    boxOfficeList = rankRecord(list);
+  }
+  render() {
+    return (
+      <div>
+        box office
+        <BootstrapTable
+          striped
+          sort={{ dataField: "weekendRev", order: "desc" }}
+          keyField="titleName"
+          data={boxOfficeList}
+          columns={columns}
+        />
+      </div>
+    );
+  }
+}
+
+export default BoxOffice;
