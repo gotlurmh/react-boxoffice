@@ -1,3 +1,14 @@
 .App {
   text-align: center;
 }
+
+table thead .dropup .caret::after {
+  content: "\2191";
+}
+table thead .dropdown .caret::after {
+  content: "\2193";
+}
+
+.sortCaret {
+  color: darkgray;
+}

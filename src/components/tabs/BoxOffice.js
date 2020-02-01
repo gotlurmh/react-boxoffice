@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
 const list = [
   {
@@ -108,45 +109,114 @@ const rankRecord = list => {
   return list;
 };
 
+const sortCaret = (order, column) => {
+  if (!order)
+    return (
+      <span className="sortCaret">
+        <font> &darr;&uarr;</font>
+      </span>
+    );
+  else if (order === "asc")
+    return (
+      <span className="sortCaret">
+        {" "}
+        &darr;<font color="black">&uarr;</font>
+      </span>
+    );
+  else if (order === "desc")
+    return (
+      <span className="sortCaret">
+        {" "}
+        <font color="black">&darr;</font>&uarr;
+      </span>
+    );
+  return null;
+};
+
+const currencyFormat = num =>
+  `$${num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}`;
+
 const columns = [
   {
     dataField: "id",
-    text: "#"
+    text: "#",
+    headerAlign: (column, colIndex) => "left",
+    align: "left",
+    style: {
+      width: "10px"
+    }
   },
   {
     dataField: "titleName",
     text: "Title",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret
   },
   {
     dataField: "distributorName",
     text: "Distributor Name",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret
   },
   {
     dataField: "weekendRev",
     text: "Weekend Total",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret,
+    formatter: currencyFormat
   },
   {
     dataField: "locs",
     text: "# of Locs",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret
   },
   {
     dataField: "locAvg",
     text: "Loc Avg",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret,
+    formatter: currencyFormat
   },
   {
     dataField: "cumeRev",
     text: "Cume Total",
-    sort: true
+    sort: true,
+    sortCaret: sortCaret,
+    formatter: currencyFormat
   }
 ];
 
-let boxOfficeList = [];
+let boxOfficeList;
 
+const SearchButton = props => {
+  let input;
+  const handleSearch = () => {
+    props.onSearch(input.value);
+  };
+  return (
+    <span className="col-sm">
+      <input
+        className="form-control"
+        style={{ backgroundColor: "darkgrey" }}
+        ref={n => (input = n)}
+        type="text"
+        onKeyUp={handleSearch}
+      />
+    </span>
+  );
+};
+
+const ExportCSVButton = props => {
+  const handleClick = () => {
+    props.onExport();
+  };
+  return (
+    <button className="btn btn-secondary" onClick={handleClick}>
+      Export to CSV
+    </button>
+  );
+};
 class BoxOffice extends Component {
   constructor() {
     super();
@@ -154,15 +224,27 @@ class BoxOffice extends Component {
   }
   render() {
     return (
-      <div>
-        box office
-        <BootstrapTable
-          striped
+      <div className="container">
+        <ToolkitProvider
           sort={{ dataField: "weekendRev", order: "desc" }}
-          keyField="titleName"
+          keyField="id"
           data={boxOfficeList}
           columns={columns}
-        />
+          search
+          exportCSV={{
+            onlyExportFiltered: true,
+            exportAll: false
+          }}
+        >
+          {props => (
+            <div>
+              <ExportCSVButton {...props.csvProps} />
+              Search:
+              <SearchButton {...props.searchProps} />
+              <BootstrapTable striped bordered={false} {...props.baseProps} />
+            </div>
+          )}
+        </ToolkitProvider>
       </div>
     );
   }
