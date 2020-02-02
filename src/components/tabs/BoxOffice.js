@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import Pagination from "react-bootstrap-table2-paginator";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 const list = [
   {
@@ -109,23 +116,23 @@ const rankRecord = list => {
   return list;
 };
 
-const sortCaret = (order, column) => {
+const sortArrow = (order, column) => {
   if (!order)
     return (
-      <span className="sortCaret">
+      <span className="sortArrow">
         <font> &darr;&uarr;</font>
       </span>
     );
   else if (order === "asc")
     return (
-      <span className="sortCaret">
+      <span className="sortArrow">
         {" "}
         &darr;<font color="black">&uarr;</font>
       </span>
     );
   else if (order === "desc")
     return (
-      <span className="sortCaret">
+      <span className="sortArrow">
         {" "}
         <font color="black">&darr;</font>&uarr;
       </span>
@@ -135,6 +142,9 @@ const sortCaret = (order, column) => {
 
 const currencyFormat = num =>
   `$${num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}`;
+
+const numberFormat = num =>
+  `${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 
 const columns = [
   {
@@ -150,39 +160,40 @@ const columns = [
     dataField: "titleName",
     text: "Title",
     sort: true,
-    sortCaret: sortCaret
+    sortArrow: sortArrow
   },
   {
     dataField: "distributorName",
     text: "Distributor Name",
     sort: true,
-    sortCaret: sortCaret
+    sortArrow: sortArrow
   },
   {
     dataField: "weekendRev",
     text: "Weekend Total",
     sort: true,
-    sortCaret: sortCaret,
+    sortArrow: sortArrow,
     formatter: currencyFormat
   },
   {
     dataField: "locs",
     text: "# of Locs",
     sort: true,
-    sortCaret: sortCaret
+    sortArrow: sortArrow,
+    formatter: numberFormat
   },
   {
     dataField: "locAvg",
     text: "Loc Avg",
     sort: true,
-    sortCaret: sortCaret,
+    sortArrow: sortArrow,
     formatter: currencyFormat
   },
   {
     dataField: "cumeRev",
     text: "Cume Total",
     sort: true,
-    sortCaret: sortCaret,
+    sortArrow: sortArrow,
     formatter: currencyFormat
   }
 ];
@@ -197,7 +208,7 @@ const SearchButton = props => {
   return (
     <span className="col-sm">
       <input
-        className="form-control"
+        className="form-control form-control-sm bg-secondary text-left m-0"
         style={{ backgroundColor: "darkgrey" }}
         ref={n => (input = n)}
         type="text"
@@ -212,19 +223,74 @@ const ExportCSVButton = props => {
     props.onExport();
   };
   return (
-    <button className="btn btn-secondary" onClick={handleClick}>
-      Export to CSV
+    <button
+      className="btn btn-secondary btn-sm float-left mr-0h mb-0h border-white"
+      onClick={handleClick}
+    >
+      CSV
     </button>
   );
 };
+
+const pageTotal = (from, to, size) => (
+  <span className="react-bootstrap-table-pagination-total">
+    Showing {from} to {to} of {size} Results
+  </span>
+);
+
+const option = {
+  paginationTotalRenderer: pageTotal,
+  showTotal: true,
+  hideSizePerPage: false,
+  alwaysShowAllBtns: false
+  //   withFirstAndLast: false
+};
+
 class BoxOffice extends Component {
   constructor() {
     super();
     boxOfficeList = rankRecord(list);
+    this.state = {
+      value: "",
+      copied: false
+    };
   }
   render() {
     return (
       <div className="container">
+        <ExcelFile
+          element={
+            <button className="btn btn-secondary btn-sm float-left mr-0h mb-0h border-white">
+              Excel
+            </button>
+          }
+        >
+          <ExcelSheet data={list} name="Boxoffice">
+            <ExcelColumn label="#" value="id" />
+            <ExcelColumn label="Title" value="titleName" />
+            <ExcelColumn label="Distributor Name" value="distributorName" />
+            <ExcelColumn label="Weekend Total" value="weekendRev" />
+            <ExcelColumn label="# of Locs" value="locs" />
+            <ExcelColumn label="Loc Avg" value="locAvg" />
+            <ExcelColumn label="Cume Total" value="cumeRev" />
+          </ExcelSheet>
+        </ExcelFile>
+        <CopyToClipboard
+          className="btn btn-secondary btn-sm float-left mr-0h mb-0h border-white"
+          text={this.state.props}
+          onCopy={() => this.setState({ copied: true })}
+        >
+          {/* <span>Copy to clipboard with span</span>
+              </CopyToClipboard>
+              <CopyToClipboard
+                text={this.state.value}
+                onCopy={() => this.setState({ copied: true })}
+              > */}
+          <button>Copy</button>
+        </CopyToClipboard>
+        {this.state.copied ? (
+          <span style={{ color: "red" }}>Copied.</span>
+        ) : null}
         <ToolkitProvider
           sort={{ dataField: "weekendRev", order: "desc" }}
           keyField="id"
@@ -238,10 +304,26 @@ class BoxOffice extends Component {
         >
           {props => (
             <div>
+              <input
+                value={this.state.value}
+                onChange={({ target: { value } }) =>
+                  this.setState({ value, copied: false })
+                }
+              />
+
               <ExportCSVButton {...props.csvProps} />
-              Search:
-              <SearchButton {...props.searchProps} />
-              <BootstrapTable striped bordered={false} {...props.baseProps} />
+              <label className="float-left">
+                Search:
+                <SearchButton {...props.searchProps} />
+              </label>
+
+              <BootstrapTable
+                striped
+                bordered={false}
+                {...props.baseProps}
+                pagination={Pagination(option)}
+                className="dataTable table"
+              />
             </div>
           )}
         </ToolkitProvider>
