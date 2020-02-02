@@ -112,7 +112,13 @@ const rankRecord = list => {
   list.sort((a, b) => b.weekendRev - a.weekendRev);
 
   let rank = 1;
-  list.map(rankid => (rankid.id = rank++));
+  list.map(row => {
+    row.id = rank++;
+    row.weekendRev = `$${numberFormat(row.weekendRev)}`;
+    row.locAvg = `$${numberFormat(row.locAvg)}`;
+    row.cumeRev = `$${numberFormat(row.cumeRev)}`;
+    row.locs = numberFormat(row.locs);
+  });
   return list;
 };
 
@@ -139,9 +145,6 @@ const sortArrow = (order, column) => {
     );
   return null;
 };
-
-const currencyFormat = num =>
-  `$${num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")}`;
 
 const numberFormat = num =>
   `${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -172,29 +175,25 @@ const columns = [
     dataField: "weekendRev",
     text: "Weekend Total",
     sort: true,
-    sortArrow: sortArrow,
-    formatter: currencyFormat
+    sortArrow: sortArrow
   },
   {
     dataField: "locs",
     text: "# of Locs",
     sort: true,
-    sortArrow: sortArrow,
-    formatter: numberFormat
+    sortArrow: sortArrow
   },
   {
     dataField: "locAvg",
     text: "Loc Avg",
     sort: true,
-    sortArrow: sortArrow,
-    formatter: currencyFormat
+    sortArrow: sortArrow
   },
   {
     dataField: "cumeRev",
     text: "Cume Total",
     sort: true,
-    sortArrow: sortArrow,
-    formatter: currencyFormat
+    sortArrow: sortArrow
   }
 ];
 
@@ -265,8 +264,12 @@ class BoxOffice extends Component {
             </button>
           }
         >
-          <ExcelSheet data={list} name="Boxoffice">
-            <ExcelColumn label="#" value="id" />
+          <ExcelSheet data={boxOfficeList} name="Boxoffice">
+            <ExcelColumn
+              label="#"
+              value="id"
+              style={{ style: { font: { bold: true } } }}
+            />
             <ExcelColumn label="Title" value="titleName" />
             <ExcelColumn label="Distributor Name" value="distributorName" />
             <ExcelColumn label="Weekend Total" value="weekendRev" />
