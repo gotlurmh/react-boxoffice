@@ -94,12 +94,6 @@ class BoxOffice extends Component {
         >
           {props => (
             <div>
-              <input
-                value={this.state.value}
-                onChange={({ target: { value } }) =>
-                  this.setState({ value, copied: false })
-                }
-              />
               <ExportCSVButton {...props.csvProps} />
               Search:
               <SearchBar {...props.searchProps} />
