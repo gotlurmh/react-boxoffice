@@ -6,7 +6,7 @@ const ExportCSVButton = props => {
   };
   return (
     <button className="btn btn-secondary" onClick={handleClick}>
-      Export to CSV
+      CSV
     </button>
   );
 };

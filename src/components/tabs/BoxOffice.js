@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import paginationFactory from "react-bootstrap-table2-paginator";
 import SortCaret from "../SortArrow";
 import SearchBar from "../SearchBar";
 import { ExportCSVButton } from "../Button";
@@ -54,7 +55,8 @@ const columns = [
   {
     dataField: "locs",
     text: "# of Locs",
-    sort: true
+    sort: true,
+    sortCaret: SortCaret
   },
   {
     dataField: "locAvg",
