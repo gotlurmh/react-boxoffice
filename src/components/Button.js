@@ -16,6 +16,33 @@ const ExportCSVButton = props => {
   );
 };
 
+const CopyButton = props => {
+  let stringToCopy = "";
+  props.headings.forEach(heading => (stringToCopy += heading.text + "\t"));
+
+  props.data.forEach(row => {
+    stringToCopy = stringToCopy.trim() + "\n";
+    stringToCopy += row.id + "\t";
+    stringToCopy += row.titleName + "\t";
+    stringToCopy += row.distributorName + "\t";
+    stringToCopy += row.weekendRev + "\t";
+    stringToCopy += row.locs + "\t";
+    stringToCopy += row.locAvg + "\t";
+    stringToCopy += row.cumeRev;
+  });
+
+  return (
+    <button
+      className="btn btn-secondary"
+      onClick={() => {
+        navigator.clipboard.writeText(stringToCopy);
+      }}
+    >
+      Copy
+    </button>
+  );
+};
+
 const ExportExcelButton = props => {
   return (
     <ExcelFile element={<button className="btn btn-secondary">Excel</button>}>
@@ -34,4 +61,4 @@ const ExportExcelButton = props => {
   );
 };
 
-export { ExportCSVButton, ExportExcelButton };
+export { ExportCSVButton, ExportExcelButton, CopyButton };

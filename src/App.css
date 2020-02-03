@@ -38,3 +38,7 @@
   border: 2px solid transparent;
   font-weight: 600;
 }
+
+.react-bootstrap-table-pagination-list-hidden {
+  display: none;
+}
