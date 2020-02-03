@@ -4,7 +4,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import SortCaret from "../SortArrow";
 import SearchBar from "../SearchBar";
-import { ExportCSVButton } from "../Button";
+import { ExportCSVButton, ExportExcelButton } from "../Button";
 
 const formatTableData = rows => {
   const numberFormat = num =>
@@ -96,6 +96,7 @@ class BoxOffice extends Component {
         >
           {props => (
             <div>
+              <ExportExcelButton data={boxOfficeList} />
               <ExportCSVButton {...props.csvProps} />
               Search:
               <SearchBar {...props.searchProps} />
