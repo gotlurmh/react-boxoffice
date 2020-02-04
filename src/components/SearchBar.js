@@ -6,15 +6,16 @@ const SearchBar = props => {
     props.onSearch(input.value);
   };
   return (
-    <span className="col-sm">
+    <div className="col-sm searchbar">
+      <label data-reactid="search">SEARCH:</label>
       <input
-        className="form-control"
-        style={{ backgroundColor: "darkgrey" }}
+        className="form-control searchinput"
+        data-reactid="search"
         ref={n => (input = n)}
         type="text"
         onKeyUp={handleSearch}
       />
-    </span>
+    </div>
   );
 };
 

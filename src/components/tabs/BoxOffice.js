@@ -145,7 +145,6 @@ class BoxOffice extends Component {
               <ExportExcelButton data={boxOfficeList} />
               <ExportCSVButton {...props.csvProps} />
               <CopyButton data={boxOfficeList} headings={columns} />
-              Search:
               <SearchBar {...props.searchProps} />
               <BootstrapTable
                 striped

@@ -54,17 +54,19 @@ const CopyButton = props => {
         onClick={() => {
           navigator.clipboard.writeText(stringToCopy);
           showModal();
-          setTimeout(hideModal, 15000);
+          setTimeout(hideModal, 1000);
         }}
       >
         Copy
       </button>
 
       <Modal show={isOpen} onHide={hideModal}>
-        <ModalHeader className="">
-          <ModalTitle>Copy to clipboard</ModalTitle>
+        <ModalHeader>
+          <ModalTitle className="clipboard">Copy to clipboard</ModalTitle>
         </ModalHeader>
-        <ModalBody>Copied 12 rows to clipboard</ModalBody>
+        <ModalBody className="clipboard_text">
+          Copied 12 rows to clipboard
+        </ModalBody>
       </Modal>
     </>
   );
