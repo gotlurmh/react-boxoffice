@@ -107,6 +107,7 @@ const list = [
 function App() {
   return (
     <div className="App">
+      <h1> Domestic Box Office (Estimates) Weekend of January 31</h1>
       <BoxOffice list={list} />
     </div>
   );
