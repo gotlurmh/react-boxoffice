@@ -95,5 +95,7 @@ label {
   background-color: darkgray;
   justify-content: center;
   border-radius: 0;
-  display: block;
+  display: flex;
+  height: 60px;
+  align-items: center;
 }
