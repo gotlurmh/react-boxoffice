@@ -1,5 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactExport from "react-export-excel";
+
+import Modal from "react-bootstrap/Modal";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import ModalTitle from "react-bootstrap/ModalTitle";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -31,15 +37,36 @@ const CopyButton = props => {
     stringToCopy += row.cumeRev;
   });
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const showModal = () => {
+    setIsOpen(true);
+  };
+
+  const hideModal = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <button
-      className="btn btn-secondary"
-      onClick={() => {
-        navigator.clipboard.writeText(stringToCopy);
-      }}
-    >
-      Copy
-    </button>
+    <>
+      <button
+        className="btn btn-secondary"
+        onClick={() => {
+          navigator.clipboard.writeText(stringToCopy);
+          showModal();
+          setTimeout(hideModal, 15000);
+        }}
+      >
+        Copy
+      </button>
+
+      <Modal show={isOpen} onHide={hideModal}>
+        <ModalHeader className="">
+          <ModalTitle>Copy to clipboard</ModalTitle>
+        </ModalHeader>
+        <ModalBody>Copied 12 rows to clipboard</ModalBody>
+      </Modal>
+    </>
   );
 };
 
