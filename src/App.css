@@ -52,6 +52,7 @@ label {
   color: #2a303e;
   background-color: #efefef;
   margin: 0.25rem;
+  font-size: small;
 }
 
 .btn-secondary:hover {
