@@ -100,3 +100,11 @@ label {
   height: 60px;
   align-items: center;
 }
+
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal.fade .modal-dialog {
+  padding-top: 300px;
+}
