@@ -142,9 +142,9 @@ class BoxOffice extends Component {
         >
           {props => (
             <div>
-              <ExportExcelButton data={boxOfficeList} />
-              <ExportCSVButton {...props.csvProps} />
               <CopyButton data={boxOfficeList} headings={columns} />
+              <ExportCSVButton {...props.csvProps} />
+              <ExportExcelButton data={boxOfficeList} />
               <SearchBar {...props.searchProps} />
               <BootstrapTable
                 striped
