@@ -72,15 +72,18 @@ const columns = [
     text: "#",
     headerAlign: (column, colIndex) => "left",
     align: "left",
-    style: {
-      width: "10px"
+    headerStyle: {
+      width: "50px"
     }
   },
   {
     dataField: "titleName",
     text: "Title",
     sort: true,
-    sortCaret: SortCaret
+    sortCaret: SortCaret,
+    headerStyle: {
+      width: "250px"
+    }
   },
   {
     dataField: "distributorName",
